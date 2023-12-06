@@ -19,7 +19,7 @@
 Um die App zu installieren, klone das Repository und öffne das Projekt in Android Studio. Dann führe das Projekt auf einem Android-Gerät oder Emulator aus.
 
 ```
-[git clone https://github.com/IhrGitHubBenutzername/CaptureTheCampus.git](https://github.com/ledo9315/capture_the_campus)
+git clone https://github.com/ledo9315/capture_the_campus
 ```
 
 ## Verwendung
