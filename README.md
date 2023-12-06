@@ -31,3 +31,6 @@ Start the app on your Android device. After launching the app, you can:
 4. View your score and rank in the highscore list.
 
 
+---
+
+Developed with ☕ and ❤️
