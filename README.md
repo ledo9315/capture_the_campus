@@ -3,7 +3,7 @@
 ## Überblick
 "Capture the Campus" ist eine interaktive, auf einem Campus basierende Android-App, die Spielern die Möglichkeit bietet, virtuelle Punkte an verschiedenen Orten auf dem Campus zu sammeln. Die App kombiniert Elemente von Geolocation-Tracking und Gamification, um ein einzigartiges und engagierendes Erlebnis zu schaffen.
 
-[![Screenshot-2023-12-06-030758.png](https://i.postimg.cc/QxftpF7H/Screenshot-2023-12-06-030758.png)](https://postimg.cc/nCQpxc0J)
+[![Screenshot-2023-12-06-030758.png](https://i.postimg.cc/QxftpF7H/Screenshot-2023-12-06-030758.png)](https://postimg.cc/nCQpxc0J) [![Screenshot-2023-12-06-030837.png](https://i.postimg.cc/HnZg77Nm/Screenshot-2023-12-06-030837.png)](https://postimg.cc/m1HqvhRp)
 
 ## Funktionen
 - **Karte des Campus:** Nutzer können eine interaktive Karte des Campus einsehen, auf der die zu sammelnden Punkte markiert sind.
