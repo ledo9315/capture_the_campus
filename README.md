@@ -13,7 +13,6 @@
 
 ## Technology
 - **Programming Language:** Kotlin
-- **Architecture:** Model-View-ViewModel (MVVM)
 - **Geolocation:** Utilizes Android Location Services
 - **UI Design:** Application of Material Design principles
 
