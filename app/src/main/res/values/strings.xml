@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Capture the Campus</string>
+    <string name="map_image">mapImage</string>
+    <string name="alt_background">background</string>
+    <string name="user_input">Your name</string>
+    <string name="select_player">Select Player</string>
+
+    <!-- Headline -->
+    <string name="headline_one">Capture</string>
+    <string name="headline_two">the</string>
+    <string name="headline_three">Campus</string>
+    <!-- Buttons -->
+    <string name="start_button">Start</string>
+    <string name="create_button">Create Game</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="retry_button">Retry</string>
+    <string name="leave_button">Leave</string>
+    <string name="result_button">Result</string>
+    <string name="done_button">Done</string>
+    <string name="FlagPosition">Set Flag at Position</string>
+    <string name="your_name">Your Name</string>
+    <string name="map_point">map_point</string>
+    <string name="help_button_description">Help</string>
+    <string name="delete_string">Delete</string>
+    <string name="flag_string">Flag</string>
+    <string name="ok_string">Okay</string>
+    <string name="cancel_string">Cancel</string>
+</resources>

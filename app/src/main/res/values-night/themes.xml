@@ -1,0 +1,8 @@
+<resources>
+    <style name="Base.Theme.CaptureTheCampus" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/accentColor</item>
+        <item name="android:background">@color/backgroundColor</item>
+        <item name="android:buttonStyle">@style/PrimaryButtonStyle</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+</resources>

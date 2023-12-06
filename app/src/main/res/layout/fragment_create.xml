@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.hsfl.leo_nelly.capturethecampus.MainViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".CreateFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.hsfl.leo_nelly.capturethecampus.MapView
+                android:id="@+id/mapImageCreate"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/map_image"
+                android:src="@drawable/campus_map"
+                app:layout_constraintBottom_toTopOf="@+id/setFlagButtonCreate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="ImageContrastCheck" />
+
+            <ImageView
+                android:id="@+id/help_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/default_margin"
+                android:background="@color/transparent"
+                android:contentDescription="@string/help_button_description"
+                android:src="@drawable/help_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ImageContrastCheck" />
+
+            <ImageView
+                android:id="@+id/imageViewPosition"
+                android:layout_width="@dimen/image_view_small"
+                android:layout_height="@dimen/image_view_small"
+                android:background="@color/transparent"
+                android:contentDescription="@string/map_point"
+                android:src="@drawable/red_dot"
+                app:layout_constraintBottom_toBottomOf="@id/mapImageCreate"
+                app:layout_constraintEnd_toEndOf="@id/mapImageCreate"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@id/mapImageCreate"
+                app:layout_constraintTop_toTopOf="@id/mapImageCreate"
+                app:layout_constraintVertical_bias="0.5" />
+
+
+            <Button
+                android:id="@+id/setFlagButtonCreate"
+                style="@style/PrimaryButtonStyle"
+                android:background="@drawable/rounded_button"
+                android:text="@string/FlagPosition"
+                app:layout_constraintBottom_toTopOf="@+id/editTextText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline4"
+                tools:ignore="VisualLintButtonSize,TextContrastCheck,VisualLintBounds" />
+
+            <EditText
+                android:id="@+id/editTextText"
+                style="@style/EditTextStyle"
+                android:autofillHints=""
+                android:background="@drawable/rounded_input"
+                android:drawablePadding="@dimen/small_margin"
+                android:ems="12"
+                android:hint="@string/your_name"
+                android:inputType="text"
+                android:text="@={viewmodel.playerName}"
+                android:textColor="@color/white"
+                android:textColorHint="@color/light_grey"
+                app:drawableLeftCompat="@drawable/user_icon"
+                app:layout_constraintBottom_toTopOf="@+id/scrollViewCreate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/setFlagButtonCreate"
+                tools:ignore="TextContrastCheck" />
+
+            <ScrollView
+                android:id="@+id/scrollViewCreate"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/default_margin"
+                android:background="@color/field_black"
+                android:paddingStart="@dimen/small_margin"
+                android:paddingEnd="@dimen/small_margin"
+                app:layout_constraintBottom_toTopOf="@+id/cancelGameButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextText"
+                tools:ignore="RtlSymmetry">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewCreate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </ScrollView>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/startGameButton"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/start_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cancelGameButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="VisualLintButtonSize,TextContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancelGameButton"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/startGameButton"
+                tools:ignore="VisualLintButtonSize,TextContrastCheck" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="277dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+</layout>

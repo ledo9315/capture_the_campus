@@ -1,0 +1,21 @@
+<resources>
+    <!-- Allgemeine Abstände -->
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="large_margin">32dp</dimen>
+    <dimen name="xlarge_margin">48dp</dimen>
+
+    <!-- Textgrößen -->
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="text_size_large">24sp</dimen>
+    <dimen name="text_size_xlarge">48sp</dimen>
+
+    <!-- Buttonhöhen -->
+    <dimen name="button_height">48dp</dimen>
+
+    <!-- ImageView-Größen -->
+    <dimen name="image_view_small">40dp</dimen>
+    <dimen name="image_view_medium">60dp</dimen>
+    <dimen name="image_view_large">80dp</dimen>
+</resources>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.hsfl.leo_nelly.capturethecampus.MainViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ResultFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/visitedFlagsTextView"
+                style="@style/HeadlineStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:drawablePadding="@dimen/small_margin"
+                android:text="@{viewmodel.visitedFlagsCount}"
+                android:textSize="36sp"
+                app:drawableRightCompat="@drawable/flag_icon_not_visited_white"
+                app:layout_constraintBottom_toTopOf="@+id/tvTimerResult"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTimerResult"
+                style="@style/HeadlineStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{BindingAdapterUtils.formatElapsedTime(viewmodel.elapsedTime)}"
+                app:layout_constraintBottom_toTopOf="@+id/doneButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDistance"
+                style="@style/HeadlineStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.totalDistanceLiveData}"
+                android:textSize="@dimen/text_size_large"
+                app:layout_constraintBottom_toTopOf="@+id/doneButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTimerResult" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/doneButton"
+                style="@style/PrimaryButtonStyle"
+                android:text="@string/done_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="VisualLintButtonSize,TextContrastCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+</layout>

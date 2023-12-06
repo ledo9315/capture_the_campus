@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.hsfl.leo_nelly.capturethecampus.MainViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".StartFragment">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/mapBackgroundImageStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/alt_background"
+                android:src="@drawable/background_image_campus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ImageContrastCheck" />
+
+            <TextView
+                android:id="@+id/tvHeadlineCapture"
+                style="@style/HeadlineStyle"
+                android:text="@string/headline_one"
+                android:textColor="@color/accentColor"
+                app:layout_constraintBottom_toTopOf="@+id/tvHeadlineThe"
+                app:layout_constraintStart_toStartOf="@+id/mapBackgroundImageStart"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/tvHeadlineThe"
+                style="@style/HeadlineStyle"
+                android:text="@string/headline_two"
+                android:textColor="@color/secondaryColor"
+                app:layout_constraintBottom_toTopOf="@+id/tvHeadlineFlag"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/tvHeadlineFlag"
+                style="@style/HeadlineStyle"
+                android:layout_marginBottom="24dp"
+                android:text="@string/headline_three"
+                app:layout_constraintBottom_toBottomOf="@+id/mapBackgroundImageStart"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tvHighscore"
+                style="@style/BaseTextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/large_margin"
+                android:background="@drawable/rounded_dark_background"
+                android:drawablePadding="@dimen/small_margin"
+                android:paddingHorizontal="@dimen/default_margin"
+                android:paddingVertical="@dimen/default_margin"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_medium"
+                app:drawableLeftCompat="@drawable/highscore_icon"
+                app:layout_constraintBottom_toTopOf="@+id/createButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mapBackgroundImageStart"
+                app:highScore="@{viewmodel.currentHighScore.time}"
+                app:playerName="@{viewmodel.currentHighScore.name}"
+                app:totalDistance="@{viewmodel.currentHighScore.distance}" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/createButton"
+                style="@style/PrimaryButtonStyle"
+                android:text="@string/create_button"
+                app:layout_constraintBottom_toTopOf="@+id/retryButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="VisualLintButtonSize,TextContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/retryButton"
+                style="@style/PrimaryButtonStyle"
+                android:text="@string/retry_button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="VisualLintButtonSize,TextContrastCheck" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </FrameLayout>
+</layout>
