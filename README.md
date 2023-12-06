@@ -1,34 +1,34 @@
 # Capture the Campus - Android App
 
-## Überblick
-"Capture the Campus" ist eine interaktive, auf einem Campus basierende Android-App, die Spielern die Möglichkeit bietet, virtuelle Punkte an verschiedenen Orten auf dem Campus zu sammeln. Die App kombiniert Elemente von Geolocation-Tracking und Gamification, um ein einzigartiges und engagierendes Erlebnis zu schaffen.
+## Overview
+"Capture the Campus" is an interactive, campus-based Android app that offers players the opportunity to collect virtual points at various locations on campus. The app combines elements of geolocation tracking and gamification to create a unique and engaging experience.
 
-[![Screenshot-2023-12-06-030758.png](https://i.postimg.cc/QxftpF7H/Screenshot-2023-12-06-030758.png)](https://postimg.cc/nCQpxc0J) [![Screenshot-2023-12-06-030837.png](https://i.postimg.cc/YSqTQS1q/Screenshot-2023-12-06-030837.png)](https://postimg.cc/LJwyp2Cr)
+![start screen](https://i.postimg.cc/QxftpF7H/Screenshot-2023-12-06-030758.png) ![game screen](https://i.postimg.cc/YSqTQS1q/Screenshot-2023-12-06-030837.png)
 
-## Funktionen
-- **Karte des Campus:** Nutzer können eine interaktive Karte des Campus einsehen, auf der die zu sammelnden Punkte markiert sind.
-- **Punkt-Sammlung:** Spieler besuchen verschiedene Orte auf dem Campus, um Punkte zu sammeln.
-- **Highscore-Liste:** Die App führt eine Liste der Spieler mit den höchsten Punktzahlen.
-- **Spielerprofile:** Nutzer können ihre Spielernamen eingeben und ihre Spielfortschritte verfolgen.
+## Features
+- **Campus Map:** Users can view an interactive map of the campus, showing the points to be collected.
+- **Point Collection:** Players visit various locations on campus to collect points.
+- **Highscore List:** The app maintains a list of players with the highest scores.
+- **Player Profiles:** Users can enter their player names and track their game progress.
 
-## Technologie
-- **Programmiersprache:** Kotlin
-- **Architektur:** Model-View-ViewModel (MVVM)
-- **Geolocation:** Nutzung des Android Location Services
-- **UI-Design:** Anwendung von Material Design-Prinzipien
+## Technology
+- **Programming Language:** Kotlin
+- **Architecture:** Model-View-ViewModel (MVVM)
+- **Geolocation:** Utilizes Android Location Services
+- **UI Design:** Application of Material Design principles
 
 ## Installation
-Um die App zu installieren, klone das Repository und öffne das Projekt in Android Studio. Dann führe das Projekt auf einem Android-Gerät oder Emulator aus.
+To install the app, clone the repository and open the project in Android Studio. Then run the project on an Android device or emulator.
 
 ```
 git clone https://github.com/ledo9315/capture_the_campus
 ```
 
-## Verwendung
-Starte die App auf deinem Android-Gerät. Nach dem Starten der App kannst du:
-1. Deinen Spielernamen eingeben.
-2. Die Karte einsehen, um Punkte in deiner Nähe zu finden.
-3. Zum Standort eines Punktes navigieren, um ihn zu sammeln.
-4. Deine Punktzahl und Rang in der Highscore-Liste einsehen.
+## Usage
+Start the app on your Android device. After launching the app, you can:
+1. Enter your player name.
+2. View the map to find points near you.
+3. Navigate to the location of a point to collect it.
+4. View your score and rank in the highscore list.
 
 
