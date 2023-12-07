@@ -51,24 +51,25 @@ class GameFragment : Fragment() {
             findNavController().navigate(R.id.action_gameFragment_to_startFragment)
         }
 
+    }
+
+    private fun observeViewModel() {
+
         mainViewModel.isGameWon.observe(viewLifecycleOwner) { won ->
             if (won) {
                 mainViewModel.stopGame()
-                AudioHelper.playSound(requireContext() ,R.raw.victory_sound)
-
-                mainViewModel.playerName.value?.let { playerName ->
-                    if (playerName.isNotBlank()) {
-                        mainViewModel.addPlayerName(playerName)
-                    }
-                }
+                val newScore = HighScore(
+                    challengeId = mainViewModel.selectedChallenge.value?.name ?: "",
+                    name = mainViewModel.playerName.value ?: "",
+                    time = mainViewModel.elapsedTime.value ?: 0,
+                    distance = mainViewModel.totalDistanceLiveData.value ?: 0f
+                )
+                mainViewModel.updateHighScoreForChallenge(newScore.challengeId, newScore)
 
                 findNavController().navigate(R.id.action_gameFragment_to_resultFragment)
             }
         }
 
-    }
-
-    private fun observeViewModel() {
 
         mainViewModel.mapX.observe(viewLifecycleOwner) { x ->
             binding.imageViewPosition.layoutParams = (binding.imageViewPosition.layoutParams as ConstraintLayout.LayoutParams)

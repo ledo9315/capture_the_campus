@@ -15,6 +15,12 @@ object BindingAdapterUtils {
         textView.text = if (value != null) String.format("Distance: %.0fm", value) else ""
     }
 
+    @JvmStatic
+    @BindingAdapter("challengeId")
+    fun setChallengeId(textView: TextView, challengeId: String?) {
+        textView.text = challengeId ?: "No Challenge"
+    }
+
 
     @JvmStatic
     @BindingAdapter("playerName", "highScore", "totalDistance")
@@ -33,10 +39,14 @@ object BindingAdapterUtils {
 
         val text = when {
             playerName.isNullOrEmpty() -> "No Highscore yet"
-            else -> "$playerName\nTime: $formattedTime\nDistance: $formattedDistance"
+            else -> "Player: $playerName\nTime: $formattedTime\nDistance: $formattedDistance"
         }
         textView.text = text
     }
+
+
+
+
 
     @JvmStatic
     fun formatElapsedTime(elapsedTime: Long?): String {

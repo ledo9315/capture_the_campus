@@ -69,14 +69,15 @@
                 android:paddingVertical="@dimen/default_margin"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_medium"
-                app:drawableLeftCompat="@drawable/highscore_icon"
+                app:challengeId="@{viewmodel.currentHighScore.challengeId}"                app:playerName="@{viewmodel.currentHighScore.name}"
                 app:highScore="@{viewmodel.currentHighScore.time}"
+                app:totalDistance="@{viewmodel.currentHighScore.distance}"
+                app:drawableLeftCompat="@drawable/highscore_icon"
                 app:layout_constraintBottom_toTopOf="@+id/selectChallengeButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mapBackgroundImageStart"
-                app:playerName="@{viewmodel.currentHighScore.name}"
-                app:totalDistance="@{viewmodel.currentHighScore.distance}" />
+                 />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/selectChallengeButton"

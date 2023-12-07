@@ -16,7 +16,9 @@ class MainViewModel : ViewModel() {
     val showToast: MutableLiveData<Boolean> get() = _showToast
 
     private val _currentHighScore: MutableLiveData<HighScore> = MutableLiveData(
-        HighScore("", Long.MAX_VALUE, Float.MAX_VALUE))
+        HighScore("", "", Long.MAX_VALUE, Float.MAX_VALUE)
+    )
+
     val currentHighScore: MutableLiveData<HighScore> get() = _currentHighScore
 
 
@@ -56,6 +58,7 @@ class MainViewModel : ViewModel() {
     val selectedChallenge: MutableLiveData<Challenge> = MutableLiveData()
     val challengeName = MutableLiveData<String>()
     val challengeDescription = MutableLiveData<String>()
+    private val challengeHighScores = mutableMapOf<String, HighScore>()
 
 
     // --------------- Variablen ---------------
@@ -77,6 +80,17 @@ class MainViewModel : ViewModel() {
         private const val TL_LONGITUDE = 9.442749
         private const val BR_LATITUDE = 54.769009
         private const val BR_LONGITUDE = 9.464722
+    }
+
+    private fun getCurrentHighScoreForChallenge(challengeId: String): HighScore {
+        return challengeHighScores[challengeId] ?: HighScore(challengeId, "", Long.MAX_VALUE, Float.MAX_VALUE)
+    }
+
+    fun updateHighScoreForChallenge(challengeId: String, newScore: HighScore) {
+        val currentHighScore = getCurrentHighScoreForChallenge(challengeId)
+        if (isScoreBetter(newScore, currentHighScore)) {
+            challengeHighScores[challengeId] = newScore
+        }
     }
 
 
@@ -308,12 +322,22 @@ class MainViewModel : ViewModel() {
         return points.subList(0, upToIndex).all { it.state == PointState.VISITED }
     }
 
+    fun getFormattedHighScore(): String {
+        return "Challenge: ${currentHighScore.value?.challengeId}\n" +
+            "Player: ${currentHighScore.value?.name}\n" +
+            "Time: ${currentHighScore.value?.time}\n" +
+            "Distance: ${currentHighScore.value?.distance}"
+    }
+
+
     private fun updateHighScore() {
         val playerName = _playerName.value ?: return
+        val challengeId = selectedChallenge.value?.name ?: "" // Annahme: Challenge-Name als ID
         val numberOfFlags = _mapPoints.value?.count { it.state == PointState.VISITED } ?: 0
         if (numberOfFlags == 0) return
 
         val currentScore = HighScore(
+            challengeId = challengeId,
             name = playerName,
             time = _elapsedTime.value ?: Long.MAX_VALUE,
             distance = _totalDistanceLiveData.value ?: Float.MAX_VALUE
@@ -324,11 +348,17 @@ class MainViewModel : ViewModel() {
         }
     }
 
+
     private fun isScoreBetter(newScore: HighScore, oldScore: HighScore?, numberOfFlags: Int): Boolean {
         val newRatio = (newScore.time + newScore.distance) / numberOfFlags
         val oldRatio = oldScore?.let { (it.time + it.distance) / numberOfFlags } ?: Float.MAX_VALUE
         return newRatio < oldRatio
     }
+
+    private fun isScoreBetter(newScore: HighScore, currentScore: HighScore): Boolean {
+        return newScore.time < currentScore.time
+    }
+
 
     private fun checkIfGameIsWon() {
         val allPointsVisited = _mapPoints.value?.all { it.state == PointState.VISITED } ?: false
