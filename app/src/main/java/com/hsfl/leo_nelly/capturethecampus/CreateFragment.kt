@@ -45,8 +45,9 @@ class CreateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupButtons()
-        setupMapView()
         observeViewModel()
+        setupMapView()
+
 
         binding.recyclerViewCreate.adapter = mapPointsAdapter
         binding.mapImageCreate.showTapHint = true
@@ -104,6 +105,7 @@ class CreateFragment : Fragment() {
         }
 
         mainViewModel.mapPoints.observe(viewLifecycleOwner) { updatedPoints ->
+            Log.d("CreateFragment", "mapPoints updated")
             binding.mapImageCreate.setMapPoints(updatedPoints)
             mapPointsAdapter.updatePoints(updatedPoints)
         }

@@ -61,6 +61,7 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun setMapPoints(points: List<MapPoint>) {
         mapPoints = points
+        Log.d("MapView", "$mapPoints")
         invalidate()
     }
 
@@ -68,6 +69,7 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         super.onDraw(canvas)
         canvas.drawBitmap(mapBitmap, bitmapMatrix, null)
         drawMapPoints(canvas)
+        Log.d("MapView", "onDraw")
     }
 
     private fun drawMapPoints(canvas: Canvas) {

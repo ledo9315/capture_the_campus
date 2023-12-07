@@ -25,4 +25,9 @@
     <string name="flag_string">Flag</string>
     <string name="ok_string">Okay</string>
     <string name="cancel_string">Cancel</string>
+    <string name="select_challenge">Select Challenge</string>
+    <string name="challenge_name">Challenge Name</string>
+    <string name="challenge_description">Challenge Description</string>
+    <string name="save_challenge">Save Challenge</string>
+    <string name="save_challenge_hint">Save the challenge if you wish</string>
 </resources>

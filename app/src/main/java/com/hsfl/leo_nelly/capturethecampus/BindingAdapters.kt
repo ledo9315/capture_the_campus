@@ -38,12 +38,13 @@ object BindingAdapterUtils {
         textView.text = text
     }
 
-
     @JvmStatic
     fun formatElapsedTime(elapsedTime: Long?): String {
-        if (elapsedTime == null) return "00:00"
+        if (elapsedTime == null) return "00:00:00"
         val seconds = (elapsedTime / 1000) % 60
         val minutes = (elapsedTime / (1000 * 60)) % 60
-        return String.format("%02d:%02d", minutes, seconds)
+        val hundredths = (elapsedTime / 10) % 100
+        return String.format("%02d:%02d:%02d", minutes, seconds, hundredths)
     }
+
 }

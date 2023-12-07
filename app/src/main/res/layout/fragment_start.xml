@@ -62,7 +62,7 @@
                 style="@style/BaseTextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/large_margin"
+                android:layout_marginTop="32dp"
                 android:background="@drawable/rounded_dark_background"
                 android:drawablePadding="@dimen/small_margin"
                 android:paddingHorizontal="@dimen/default_margin"
@@ -70,41 +70,46 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_medium"
                 app:drawableLeftCompat="@drawable/highscore_icon"
-                app:layout_constraintBottom_toTopOf="@+id/createButton"
+                app:highScore="@{viewmodel.currentHighScore.time}"
+                app:layout_constraintBottom_toTopOf="@+id/selectChallengeButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mapBackgroundImageStart"
-                app:highScore="@{viewmodel.currentHighScore.time}"
                 app:playerName="@{viewmodel.currentHighScore.name}"
                 app:totalDistance="@{viewmodel.currentHighScore.distance}" />
 
             <androidx.appcompat.widget.AppCompatButton
-                style="@style/SecondaryButtonStyle"
                 android:id="@+id/selectChallengeButton"
-                android:layout_width="wrap_content"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Challenge auswählen"
+                android:layout_marginBottom="16dp"
+                android:text="@string/select_challenge"
                 app:layout_constraintBottom_toTopOf="@+id/createButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvHighscore" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/createButton"
                 style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
                 android:text="@string/create_button"
-                app:layout_constraintBottom_toTopOf="@+id/retryButton"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/retryButton"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="VisualLintButtonSize,TextContrastCheck" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/retryButton"
                 style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
                 android:text="@string/retry_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/createButton"
                 tools:ignore="VisualLintButtonSize,TextContrastCheck" />
 
 

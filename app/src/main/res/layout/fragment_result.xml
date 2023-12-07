@@ -30,21 +30,21 @@
                 android:text="@{viewmodel.visitedFlagsCount}"
                 android:textSize="36sp"
                 app:drawableRightCompat="@drawable/flag_icon_not_visited_white"
-                app:layout_constraintBottom_toTopOf="@+id/tvTimerResult"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/tvTimerResult"
                 style="@style/HeadlineStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:text="@{BindingAdapterUtils.formatElapsedTime(viewmodel.elapsedTime)}"
-                app:layout_constraintBottom_toTopOf="@+id/doneButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
 
 
             <TextView
@@ -52,12 +52,70 @@
                 style="@style/HeadlineStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:text="@{viewmodel.totalDistanceLiveData}"
                 android:textSize="@dimen/text_size_large"
-                app:layout_constraintBottom_toTopOf="@+id/doneButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTimerResult" />
+                app:layout_constraintTop_toBottomOf="@+id/visitedFlagsTextView" />
+
+            <TextView
+                android:id="@+id/tvSaveChallengeHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/save_challenge_hint"
+                app:layout_constraintBottom_toTopOf="@+id/challengeNameInput"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/challengeNameInput"
+                style="@style/EditTextStyle"
+                android:autofillHints=""
+                android:background="@drawable/rounded_input"
+                android:drawablePadding="@dimen/small_margin"
+                android:ems="12"
+                android:hint="@string/challenge_name"
+                android:inputType="text"
+                android:text="@={viewmodel.challengeName}"
+                android:textColor="@color/white"
+                android:textColorHint="@color/light_grey"
+                app:layout_constraintBottom_toTopOf="@+id/challengeDescriptionInput"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="TextContrastCheck" />
+
+            <EditText
+                android:id="@+id/challengeDescriptionInput"
+                style="@style/EditTextStyle"
+                android:autofillHints=""
+                android:background="@drawable/rounded_input"
+                android:drawablePadding="@dimen/small_margin"
+                android:ems="12"
+                android:hint="@string/challenge_description"
+                android:inputType="text"
+                android:text="@={viewmodel.challengeDescription}"
+                android:textColor="@color/white"
+                android:textColorHint="@color/light_grey"
+                app:layout_constraintBottom_toTopOf="@+id/saveChallengeButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="TextContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/saveChallengeButton"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="60dp"
+                android:text="@string/save_challenge"
+                app:layout_constraintBottom_toTopOf="@+id/doneButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/doneButton"

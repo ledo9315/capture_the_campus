@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="@dimen/default_margin"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_dark_background"
                 android:drawablePadding="@dimen/small_margin"
                 android:paddingHorizontal="@dimen/small_margin"
@@ -77,11 +77,23 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_large"
                 app:drawableLeftCompat="@drawable/highscore_icon"
-                app:layout_constraintBottom_toTopOf="@+id/retryButton"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:highScore="@{viewmodel.currentHighScore.time}"
+                app:layout_constraintBottom_toTopOf="@+id/selectChallengeButton"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:playerName="@{viewmodel.playerName}"
                 app:totalDistance="@{viewmodel.currentHighScore.distance}" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/selectChallengeButton"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/select_challenge"
+                app:layout_constraintBottom_toTopOf="@+id/createButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/createButton"

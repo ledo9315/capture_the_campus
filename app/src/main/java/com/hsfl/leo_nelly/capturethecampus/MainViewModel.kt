@@ -12,12 +12,13 @@ import kotlin.math.abs
 class MainViewModel : ViewModel() {
 
     // --------------- LiveData ---------------
-    val showToast: MutableLiveData<Boolean> get() = _showToast
     private val _showToast: MutableLiveData<Boolean> = MutableLiveData(false)
+    val showToast: MutableLiveData<Boolean> get() = _showToast
 
-    val currentHighScore: MutableLiveData<HighScore> get() = _currentHighScore
     private val _currentHighScore: MutableLiveData<HighScore> = MutableLiveData(
         HighScore("", Long.MAX_VALUE, Float.MAX_VALUE))
+    val currentHighScore: MutableLiveData<HighScore> get() = _currentHighScore
+
 
     private val _isGameWon: MutableLiveData<Boolean>  = MutableLiveData(false)
     val isGameWon: MutableLiveData<Boolean> get() = _isGameWon
@@ -53,10 +54,8 @@ class MainViewModel : ViewModel() {
     val flagSetEvent: LiveData<Boolean> get() = _flagSetEvent
 
     val selectedChallenge: MutableLiveData<Challenge> = MutableLiveData()
-
-    fun setMapPoints(mapPoints: List<MapPoint>) {
-        _mapPoints.value = mapPoints
-    }
+    val challengeName = MutableLiveData<String>()
+    val challengeDescription = MutableLiveData<String>()
 
 
     // --------------- Variablen ---------------
@@ -73,12 +72,14 @@ class MainViewModel : ViewModel() {
     companion object {
         private const val PROXIMITY_RADIUS = 5.0
         private const val TOLERANCE = 0.001
-        private const val TIMER_PERIOD = 1000L
+        private const val TIMER_PERIOD = 10L
         private const val TL_LATITUDE = 54.778514
         private const val TL_LONGITUDE = 9.442749
         private const val BR_LATITUDE = 54.769009
         private const val BR_LONGITUDE = 9.464722
     }
+
+
 
 
     // --------------- Methoden für das Spiel ---------------
@@ -108,14 +109,13 @@ class MainViewModel : ViewModel() {
 
     fun addMapPoint(lat: Double, lng: Double) {
         if (!isNearbyPoint(lat, lng)) {
-            val mapX = ((lng - TL_LONGITUDE) / (BR_LONGITUDE - TL_LONGITUDE)).toFloat()
-            val mapY = ((lat - TL_LATITUDE) / (BR_LATITUDE - TL_LATITUDE)).toFloat()
+            val (mapX, mapY) = calculateMapXY(lat, lng)
             val point = MapPoint(lat, lng, PointState.NOT_VISITED, mapX, mapY)
             val newPoints = (_mapPoints.value ?: mutableListOf()) + point
             _mapPoints.postValue(newPoints)
             _flagSetEvent.value = true
         } else {
-            showToast.postValue(true)
+            _showToast.postValue(true)
         }
     }
 
@@ -125,19 +125,29 @@ class MainViewModel : ViewModel() {
         addMapPoint(currentLatitude, currentLongitude)
     }
 
+    fun setMapPoints(mapPoints: List<MapPoint>) {
+        _mapPoints.value = mapPoints.map { point ->
+            val (mapX, mapY) = calculateMapXY(point.latitude, point.longitude)
+            point.copy(mapX = mapX, mapY = mapY)
+        }
+    }
+
+    private fun calculateMapXY(lat: Double, lng: Double): Pair<Float, Float> {
+        val mapX = ((lng - TL_LONGITUDE) / (BR_LONGITUDE - TL_LONGITUDE)).toFloat()
+        val mapY = ((lat - TL_LATITUDE) / (BR_LATITUDE - TL_LATITUDE)).toFloat()
+        return Pair(mapX, mapY)
+    }
+
     fun resetMapPointsStatus() {
         val currentPoints = _mapPoints.value ?: listOf()
         val resetPoints = currentPoints.map { it.copy(state = PointState.NOT_VISITED) }
         _mapPoints.postValue(resetPoints)
     }
 
-    fun clearMapPoints() {
-        _mapPoints.postValue(emptyList())
-    }
 
     fun resetTotalDistance() {
         totalDistance = 0f
-        totalDistanceLiveData.postValue(totalDistance)
+        _totalDistanceLiveData.postValue(totalDistance)
     }
 
     fun removePoint(position: Int) {
@@ -175,6 +185,7 @@ class MainViewModel : ViewModel() {
         )
 
         updateMapPosition()
+        updateMapPosition()
         updateTotalDistance()
     }
 
@@ -186,12 +197,19 @@ class MainViewModel : ViewModel() {
 
 
     // --------------- Hilfsmethoden und Logik ---------------
+    fun saveChallenge(name: String, description: String, mapPoints: List<MapPoint>) {
+        val resetMapPoints = mapPoints.map { it.copy(state = PointState.NOT_VISITED) }
+        val newChallenge = Challenge(name, description, resetMapPoints)
+        ChallengeManager.addChallenge(newChallenge)
+    }
+
+
     private fun startTimer() {
         timer = Timer().apply {
             scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     val currentTime = System.currentTimeMillis()
-                    elapsedTime.postValue(currentTime - startTime)
+                    _elapsedTime.postValue(currentTime - startTime)
                 }
             }, 0, TIMER_PERIOD)
         }
@@ -205,7 +223,7 @@ class MainViewModel : ViewModel() {
     private fun resetAndStartTimer() {
         stopTimer()
         startTime = System.currentTimeMillis()
-        elapsedTime.value = 0L
+        _elapsedTime.value = 0L
         startTimer()
     }
 
@@ -220,13 +238,13 @@ class MainViewModel : ViewModel() {
         currentMapPoint?.let { point ->
             val x = ((point.longitude - TL_LONGITUDE) / (BR_LONGITUDE - TL_LONGITUDE)).toFloat()
             val y = ((point.latitude - TL_LATITUDE) / (BR_LATITUDE - TL_LATITUDE)).toFloat()
-            mapX.postValue(x)
-            mapY.postValue(y)
+            _mapX.postValue(x)
+            _mapY.postValue(y)
         }
     }
 
     private fun updateTotalDistance() {
-        totalDistanceLiveData.postValue(totalDistance)
+        _totalDistanceLiveData.postValue(totalDistance)
     }
 
     fun updateMapPointsStatus() {
@@ -272,7 +290,7 @@ class MainViewModel : ViewModel() {
 
     private fun checkAndShowToast(): Boolean {
         if (!toastShown) {
-            showToast.postValue(true)
+            _showToast.postValue(true)
             toastShown = true
         }
         return true
@@ -283,6 +301,7 @@ class MainViewModel : ViewModel() {
             toastShown = false
         }
     }
+
 
     private fun allPreviousPointsVisited(points: List<MapPoint>, upToIndex: Int): Boolean {
         if (upToIndex == 0) return true
@@ -296,12 +315,12 @@ class MainViewModel : ViewModel() {
 
         val currentScore = HighScore(
             name = playerName,
-            time = elapsedTime.value ?: Long.MAX_VALUE,
-            distance = totalDistanceLiveData.value ?: Float.MAX_VALUE
+            time = _elapsedTime.value ?: Long.MAX_VALUE,
+            distance = _totalDistanceLiveData.value ?: Float.MAX_VALUE
         )
 
-        if (isScoreBetter(currentScore, currentHighScore.value, numberOfFlags)) {
-            currentHighScore.value = currentScore
+        if (isScoreBetter(currentScore, _currentHighScore.value, numberOfFlags)) {
+            _currentHighScore.value = currentScore
         }
     }
 
@@ -314,7 +333,7 @@ class MainViewModel : ViewModel() {
     private fun checkIfGameIsWon() {
         val allPointsVisited = _mapPoints.value?.all { it.state == PointState.VISITED } ?: false
         Log.d("MainViewModel","All Points are visited: $allPointsVisited")
-        isGameWon.postValue(allPointsVisited)
+        _isGameWon.postValue(allPointsVisited)
     }
 
     private fun isPlayerNearPoint(currentLocation: Location, mapPoint: MapPoint): Boolean {
