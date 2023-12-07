@@ -79,6 +79,17 @@
                 app:totalDistance="@{viewmodel.currentHighScore.distance}" />
 
             <androidx.appcompat.widget.AppCompatButton
+                style="@style/SecondaryButtonStyle"
+                android:id="@+id/selectChallengeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Challenge auswählen"
+                app:layout_constraintBottom_toTopOf="@+id/createButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvHighscore" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/createButton"
                 style="@style/PrimaryButtonStyle"
                 android:text="@string/create_button"

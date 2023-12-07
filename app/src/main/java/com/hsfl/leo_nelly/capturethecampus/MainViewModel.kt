@@ -11,7 +11,7 @@ import kotlin.math.abs
 
 class MainViewModel : ViewModel() {
 
-    // LiveData-Instanzen
+    // --------------- LiveData ---------------
     val showToast: MutableLiveData<Boolean> get() = _showToast
     private val _showToast: MutableLiveData<Boolean> = MutableLiveData(false)
 
@@ -52,9 +52,14 @@ class MainViewModel : ViewModel() {
     private val _flagSetEvent = MutableLiveData<Boolean>()
     val flagSetEvent: LiveData<Boolean> get() = _flagSetEvent
 
+    val selectedChallenge: MutableLiveData<Challenge> = MutableLiveData()
+
+    fun setMapPoints(mapPoints: List<MapPoint>) {
+        _mapPoints.value = mapPoints
+    }
 
 
-    // Private Variablen zur internen Logik
+    // --------------- Variablen ---------------
     private var isGameStarted = false
     private var totalDistance: Float = 0f
     private var removedPoint: MapPoint? = null
@@ -64,7 +69,7 @@ class MainViewModel : ViewModel() {
     private var toastShown = false
     private var currentMapPoint: MapPoint? = null
 
-
+    // --------------- Konstanten ---------------
     companion object {
         private const val PROXIMITY_RADIUS = 5.0
         private const val TOLERANCE = 0.001
@@ -77,7 +82,6 @@ class MainViewModel : ViewModel() {
 
 
     // --------------- Methoden für das Spiel ---------------
-
     fun startGame(resetPoints: Boolean = false) {
         if (resetPoints) {
             resetMapPointsStatus()
@@ -182,7 +186,6 @@ class MainViewModel : ViewModel() {
 
 
     // --------------- Hilfsmethoden und Logik ---------------
-
     private fun startTimer() {
         timer = Timer().apply {
             scheduleAtFixedRate(object : TimerTask() {
@@ -320,7 +323,7 @@ class MainViewModel : ViewModel() {
         return results[0] < PROXIMITY_RADIUS
     }
 
-    fun isPlayerNearAnyFlag(): Boolean {
+    fun isPlayerNearAnyPoint(): Boolean {
         val currentLocation = currentMapPoint?.location ?: return false
         return _mapPoints.value?.any { isPlayerNearPoint(currentLocation, it) } == true
     }

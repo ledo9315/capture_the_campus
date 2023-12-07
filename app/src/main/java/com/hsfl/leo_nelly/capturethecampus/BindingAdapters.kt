@@ -39,7 +39,6 @@ object BindingAdapterUtils {
     }
 
 
-
     @JvmStatic
     fun formatElapsedTime(elapsedTime: Long?): String {
         if (elapsedTime == null) return "00:00"

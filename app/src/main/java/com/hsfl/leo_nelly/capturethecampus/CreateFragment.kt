@@ -30,7 +30,13 @@ class CreateFragment : Fragment() {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = mainViewModel
-        mainViewModel.clearMapPoints()
+        //mainViewModel.clearMapPoints()
+
+        mainViewModel.selectedChallenge.observe(viewLifecycleOwner) { challenge ->
+            challenge?.let {
+                mainViewModel.setMapPoints(it.mapPoints)
+            }
+        }
 
         return binding.root
     }
@@ -51,7 +57,7 @@ class CreateFragment : Fragment() {
             mainViewModel.addMapPoint()
         }
         binding.startGameButton.setOnClickListener {
-            if (mainViewModel.isPlayerNearAnyFlag()) {
+            if (mainViewModel.isPlayerNearAnyPoint()) {
                 Toast.makeText(context, "You are too close to a flag to start the game", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }

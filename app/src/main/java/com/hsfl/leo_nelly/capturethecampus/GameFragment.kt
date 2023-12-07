@@ -55,9 +55,17 @@ class GameFragment : Fragment() {
             if (won) {
                 mainViewModel.stopGame()
                 AudioHelper.playSound(requireContext() ,R.raw.victory_sound)
+
+                mainViewModel.playerName.value?.let { playerName ->
+                    if (playerName.isNotBlank()) {
+                        mainViewModel.addPlayerName(playerName)
+                    }
+                }
+
                 findNavController().navigate(R.id.action_gameFragment_to_resultFragment)
             }
         }
+
     }
 
     private fun observeViewModel() {
