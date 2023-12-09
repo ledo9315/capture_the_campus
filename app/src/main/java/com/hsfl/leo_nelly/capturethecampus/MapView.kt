@@ -9,25 +9,16 @@ import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
-import com.hsfl.leo_nelly.capturethecampus.R.drawable.campus_map
-import com.hsfl.leo_nelly.capturethecampus.R.drawable.flag_icon_not_visited
-import com.hsfl.leo_nelly.capturethecampus.R.drawable.flag_icon_visited
 
 
 class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    private val mapDrawable = AppCompatResources.getDrawable(context, campus_map)
-    private val mapBitmap = (mapDrawable as BitmapDrawable).bitmap
-    private val flagVisitedDrawable = AppCompatResources.getDrawable(context, flag_icon_visited)
-    private val flagNotVisitedDrawable = AppCompatResources.getDrawable(context, flag_icon_not_visited)
-    private val flagVisitedBitmap = (flagVisitedDrawable as BitmapDrawable).bitmap
-    private val flagNotVisitedBitmap = (flagNotVisitedDrawable as BitmapDrawable).bitmap
+    private val mapBitmap = loadBitmap(context, R.drawable.campus_map)
+    private val flagVisitedBitmap = loadBitmap(context, R.drawable.flag_icon_visited)
+    private val flagNotVisitedBitmap = loadBitmap(context, R.drawable.flag_icon_not_visited)
     private var bitmapMatrix = Matrix()
     private var mapPoints: List<MapPoint> = listOf()
-    var showTapHint: Boolean = false
     var onMapLongClickListener: ((Double, Double) -> Unit)? = null
-
     private var _viewModel: MainViewModel? = null
     var viewModel: MainViewModel?
         get() = _viewModel
@@ -40,9 +31,6 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             Log.d("MapView", "onSingleTapUp")
-            if (showTapHint) {
-                Toast.makeText(context, "Long press to place a flag", Toast.LENGTH_SHORT).show()
-            }
             return true
         }
 
@@ -51,8 +39,15 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 val (lat, lng) = it.convertScreenPositionToLatLng(e.x, e.y, width, height)
                 onMapLongClickListener?.invoke(lat, lng)
             }
+            Log.d("MapView", "onLongPress")
         }
     })
+
+    private val textPaint = Paint().apply {
+        color = Color.BLACK
+        textSize = 80f
+        textAlign = Paint.Align.CENTER
+    }
 
     init {
         minimumHeight = 210
@@ -65,20 +60,45 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         invalidate()
     }
 
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawBitmap(mapBitmap, bitmapMatrix, null)
         drawMapPoints(canvas)
         Log.d("MapView", "onDraw")
+
+        if (mapPoints.isEmpty()) {
+            val paint = Paint().apply {
+                color = Color.WHITE
+                textSize = 80f
+                textAlign = Paint.Align.CENTER
+            }
+            canvas.drawText("Long press to place a flag", width / 2f, height / 2f, paint)
+        }
     }
 
     private fun drawMapPoints(canvas: Canvas) {
-        mapPoints.forEach { mapPoint ->
+        mapPoints.forEachIndexed { index, mapPoint ->
+
+            // Draw flag visited or not visited
             val flagBitmap = if (mapPoint.state == PointState.VISITED) flagVisitedBitmap else flagNotVisitedBitmap
-            val imageX = mapPoint.mapX * width - (flagBitmap.width / 2)
-            val imageY = mapPoint.mapY * height - (flagBitmap.height / 2)
-            canvas.drawBitmap(flagBitmap, imageX, imageY, null)
+            drawFlagWithIndex(canvas, mapPoint, flagBitmap, index + 1)
         }
+    }
+
+    private fun drawFlagWithIndex(canvas: Canvas, mapPoint: MapPoint, flagBitmap: Bitmap, index: Int) {
+        val imageX = mapPoint.mapX * width - (flagBitmap.width / 2)
+        val imageY = mapPoint.mapY * height - (flagBitmap.height / 2)
+
+        // Draw index if point is not visited
+        if(mapPoint.state == PointState.NOT_VISITED) {
+            canvas.drawText(index.toString(), imageX + 50, imageY + 100, textPaint)
+        }
+        canvas.drawBitmap(flagBitmap, imageX, imageY, null)
+    }
+
+    private fun loadBitmap(context: Context, resId: Int): Bitmap {
+        return (AppCompatResources.getDrawable(context, resId) as BitmapDrawable).bitmap
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

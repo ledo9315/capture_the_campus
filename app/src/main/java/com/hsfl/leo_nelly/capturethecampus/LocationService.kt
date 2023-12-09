@@ -25,7 +25,7 @@ class LocationService : Service() {
     private var isForegroundStarted = false
 
     companion object {
-        private const val NOTIFICATION_ID = 23
+        private const val NOTIFICATION_ID = 1
     }
 
     inner class LocalBinder : Binder() {
@@ -38,8 +38,6 @@ class LocationService : Service() {
         createNotificationChannel()
         locationClient = LocationServices.getFusedLocationProviderClient(this)
     }
-
-
 
     override fun onBind(intent: Intent): IBinder {
         return binder

@@ -11,6 +11,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
 import com.hsfl.leo_nelly.capturethecampus.databinding.FragmentGameBinding
 import androidx.fragment.app.activityViewModels
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 
 class GameFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -27,14 +29,20 @@ class GameFragment : Fragment() {
             viewmodel = mainViewModel
         }
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setupMapView()
         setupButtons()
         observeViewModel()
         mainViewModel.resetTotalDistance()
         mainViewModel.updateVisitedFlagsCount()
-        binding.mapImageGame.showTapHint = false
 
-        return binding.root
+        val pointerAnimation: Animation = AnimationUtils.loadAnimation(context, R.anim.rotate_animation)
+        binding.ivpointer?.startAnimation(pointerAnimation)
     }
 
     private fun setupMapView() {
@@ -47,6 +55,7 @@ class GameFragment : Fragment() {
     }
 
     private fun setupButtons() {
+
         binding.leaveButton.setOnClickListener {
             findNavController().navigate(R.id.action_gameFragment_to_startFragment)
         }
@@ -58,13 +67,13 @@ class GameFragment : Fragment() {
         mainViewModel.isGameWon.observe(viewLifecycleOwner) { won ->
             if (won) {
                 mainViewModel.stopGame()
-                val newScore = HighScore(
-                    challengeId = mainViewModel.selectedChallenge.value?.name ?: "",
-                    name = mainViewModel.playerName.value ?: "",
-                    time = mainViewModel.elapsedTime.value ?: 0,
-                    distance = mainViewModel.totalDistanceLiveData.value ?: 0f
-                )
-                mainViewModel.updateHighScoreForChallenge(newScore.challengeId, newScore)
+                AudioHelper.playSound(requireContext() ,R.raw.victory_sound)
+
+                mainViewModel.playerName.value?.let { playerName ->
+                    if (playerName.isNotBlank()) {
+                        mainViewModel.addPlayerName(playerName)
+                    }
+                }
 
                 findNavController().navigate(R.id.action_gameFragment_to_resultFragment)
             }
@@ -93,7 +102,7 @@ class GameFragment : Fragment() {
         }
 
         mainViewModel.visitedFlagsCount.observe(viewLifecycleOwner) { visitedFlagsText ->
-            binding.visitedFlagsTextView.text = visitedFlagsText
+            binding.visitedFlagsTextView?.text = visitedFlagsText
         }
 
         mainViewModel.showToast.observe(viewLifecycleOwner) { shouldShowToast ->

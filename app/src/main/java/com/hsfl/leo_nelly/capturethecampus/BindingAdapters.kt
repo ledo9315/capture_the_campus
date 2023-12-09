@@ -16,15 +16,14 @@ object BindingAdapterUtils {
     }
 
     @JvmStatic
-    @BindingAdapter("challengeId")
-    fun setChallengeId(textView: TextView, challengeId: String?) {
-        textView.text = challengeId ?: "No Challenge"
-    }
-
-
-    @JvmStatic
     @BindingAdapter("playerName", "highScore", "totalDistance")
     fun setHighscoreText(textView: TextView, playerName: String?, highScore: Long?, totalDistance: Float?) {
+        val formattedPlayerName = if (playerName.isNullOrEmpty()) {
+            "No Name Selected"
+        } else {
+            playerName
+        }
+
         val formattedTime = if (highScore != null && highScore != Long.MAX_VALUE) {
             formatElapsedTime(highScore)
         } else {
@@ -37,15 +36,9 @@ object BindingAdapterUtils {
             "No Distance"
         }
 
-        val text = when {
-            playerName.isNullOrEmpty() -> "No Highscore yet"
-            else -> "Player: $playerName\nTime: $formattedTime\nDistance: $formattedDistance"
-        }
+        val text = "Player: $formattedPlayerName\nTime: $formattedTime\nDistance: $formattedDistance"
         textView.text = text
     }
-
-
-
 
 
     @JvmStatic
@@ -53,8 +46,7 @@ object BindingAdapterUtils {
         if (elapsedTime == null) return "00:00:00"
         val seconds = (elapsedTime / 1000) % 60
         val minutes = (elapsedTime / (1000 * 60)) % 60
-        val hundredths = (elapsedTime / 10) % 100
-        return String.format("%02d:%02d:%02d", minutes, seconds, hundredths)
+        return String.format("%02d:%02d", minutes, seconds)
     }
 
 }

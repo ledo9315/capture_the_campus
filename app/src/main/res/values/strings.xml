@@ -30,4 +30,7 @@
     <string name="challenge_description">Challenge Description</string>
     <string name="save_challenge">Save Challenge</string>
     <string name="save_challenge_hint">Save the challenge if you wish</string>
+    <string name="long_press_to_remove">Long press to remove</string>
+    <string name="clock">clock</string>
+    <string name="clock_pointer">clock pointer</string>
 </resources>

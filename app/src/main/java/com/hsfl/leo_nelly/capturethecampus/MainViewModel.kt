@@ -1,26 +1,26 @@
 package com.hsfl.leo_nelly.capturethecampus
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.location.Location
 import android.util.Log
+import android.widget.Toast
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.abs
 
 class MainViewModel : ViewModel() {
 
-    // --------------- LiveData ---------------
+    // *************** LiveData ***************
     private val _showToast: MutableLiveData<Boolean> = MutableLiveData(false)
     val showToast: MutableLiveData<Boolean> get() = _showToast
 
     private val _currentHighScore: MutableLiveData<HighScore> = MutableLiveData(
-        HighScore("", "", Long.MAX_VALUE, Float.MAX_VALUE)
+        HighScore( "", Long.MAX_VALUE, Float.MAX_VALUE)
     )
-
     val currentHighScore: MutableLiveData<HighScore> get() = _currentHighScore
-
 
     private val _isGameWon: MutableLiveData<Boolean>  = MutableLiveData(false)
     val isGameWon: MutableLiveData<Boolean> get() = _isGameWon
@@ -58,10 +58,8 @@ class MainViewModel : ViewModel() {
     val selectedChallenge: MutableLiveData<Challenge> = MutableLiveData()
     val challengeName = MutableLiveData<String>()
     val challengeDescription = MutableLiveData<String>()
-    private val challengeHighScores = mutableMapOf<String, HighScore>()
 
-
-    // --------------- Variablen ---------------
+    // *************** Variablen ***************
     private var isGameStarted = false
     private var totalDistance: Float = 0f
     private var removedPoint: MapPoint? = null
@@ -71,7 +69,7 @@ class MainViewModel : ViewModel() {
     private var toastShown = false
     private var currentMapPoint: MapPoint? = null
 
-    // --------------- Konstanten ---------------
+    // *************** Konstanten ***************
     companion object {
         private const val PROXIMITY_RADIUS = 5.0
         private const val TOLERANCE = 0.001
@@ -82,21 +80,7 @@ class MainViewModel : ViewModel() {
         private const val BR_LONGITUDE = 9.464722
     }
 
-    private fun getCurrentHighScoreForChallenge(challengeId: String): HighScore {
-        return challengeHighScores[challengeId] ?: HighScore(challengeId, "", Long.MAX_VALUE, Float.MAX_VALUE)
-    }
-
-    fun updateHighScoreForChallenge(challengeId: String, newScore: HighScore) {
-        val currentHighScore = getCurrentHighScoreForChallenge(challengeId)
-        if (isScoreBetter(newScore, currentHighScore)) {
-            challengeHighScores[challengeId] = newScore
-        }
-    }
-
-
-
-
-    // --------------- Methoden für das Spiel ---------------
+    // *************** Spielmethoden ***************
     fun startGame(resetPoints: Boolean = false) {
         if (resetPoints) {
             resetMapPointsStatus()
@@ -158,7 +142,6 @@ class MainViewModel : ViewModel() {
         _mapPoints.postValue(resetPoints)
     }
 
-
     fun resetTotalDistance() {
         totalDistance = 0f
         _totalDistanceLiveData.postValue(totalDistance)
@@ -209,14 +192,25 @@ class MainViewModel : ViewModel() {
         return Pair(lat, lng)
     }
 
+    // *************** Hilfsmethoden und Logik ***************
+    fun saveChallenge(context: Context, name: String, description: String, mapPoints: List<MapPoint>): Boolean {
 
-    // --------------- Hilfsmethoden und Logik ---------------
-    fun saveChallenge(name: String, description: String, mapPoints: List<MapPoint>) {
         val resetMapPoints = mapPoints.map { it.copy(state = PointState.NOT_VISITED) }
         val newChallenge = Challenge(name, description, resetMapPoints)
-        ChallengeManager.addChallenge(newChallenge)
-    }
 
+        if (ChallengeManager.getPredefinedChallenges().any { it.name == name }) {
+            Toast.makeText(context, "Challenge with this name already exists", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (name.isEmpty() || description.isEmpty()) {
+            Toast.makeText(context, "Please enter a name and description", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        ChallengeManager.addChallenge(newChallenge)
+        return true
+    }
 
     private fun startTimer() {
         timer = Timer().apply {
@@ -235,9 +229,8 @@ class MainViewModel : ViewModel() {
     }
 
     private fun resetAndStartTimer() {
-        stopTimer()
         startTime = System.currentTimeMillis()
-        _elapsedTime.value = 0L
+        _elapsedTime.postValue(0)
         startTimer()
     }
 
@@ -316,28 +309,17 @@ class MainViewModel : ViewModel() {
         }
     }
 
-
     private fun allPreviousPointsVisited(points: List<MapPoint>, upToIndex: Int): Boolean {
         if (upToIndex == 0) return true
         return points.subList(0, upToIndex).all { it.state == PointState.VISITED }
     }
 
-    fun getFormattedHighScore(): String {
-        return "Challenge: ${currentHighScore.value?.challengeId}\n" +
-            "Player: ${currentHighScore.value?.name}\n" +
-            "Time: ${currentHighScore.value?.time}\n" +
-            "Distance: ${currentHighScore.value?.distance}"
-    }
-
-
     private fun updateHighScore() {
         val playerName = _playerName.value ?: return
-        val challengeId = selectedChallenge.value?.name ?: "" // Annahme: Challenge-Name als ID
         val numberOfFlags = _mapPoints.value?.count { it.state == PointState.VISITED } ?: 0
         if (numberOfFlags == 0) return
 
         val currentScore = HighScore(
-            challengeId = challengeId,
             name = playerName,
             time = _elapsedTime.value ?: Long.MAX_VALUE,
             distance = _totalDistanceLiveData.value ?: Float.MAX_VALUE
@@ -348,17 +330,11 @@ class MainViewModel : ViewModel() {
         }
     }
 
-
     private fun isScoreBetter(newScore: HighScore, oldScore: HighScore?, numberOfFlags: Int): Boolean {
         val newRatio = (newScore.time + newScore.distance) / numberOfFlags
         val oldRatio = oldScore?.let { (it.time + it.distance) / numberOfFlags } ?: Float.MAX_VALUE
         return newRatio < oldRatio
     }
-
-    private fun isScoreBetter(newScore: HighScore, currentScore: HighScore): Boolean {
-        return newScore.time < currentScore.time
-    }
-
 
     private fun checkIfGameIsWon() {
         val allPointsVisited = _mapPoints.value?.all { it.state == PointState.VISITED } ?: false
@@ -377,10 +353,9 @@ class MainViewModel : ViewModel() {
         return _mapPoints.value?.any { isPlayerNearPoint(currentLocation, it) } == true
     }
 
-    private fun isNearbyPoint(lat: Double, lng: Double, tolerance: Double = TOLERANCE): Boolean {
-        return _mapPoints.value?.any {
-            abs(it.latitude - lat) < tolerance && abs(it.longitude - lng) < tolerance
-        } ?: false
+    private fun isNearbyPoint(lat: Double, lng: Double): Boolean {
+        val currentPoints = _mapPoints.value ?: return false
+        return currentPoints.any { abs(it.latitude - lat) < TOLERANCE && abs(it.longitude - lng) < TOLERANCE }
     }
 
     fun handleEvent(eventType: EventType) {

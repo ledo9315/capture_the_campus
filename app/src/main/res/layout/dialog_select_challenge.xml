@@ -22,6 +22,7 @@
         android:layout_height="200dp"
         android:layout_marginTop="@dimen/large_margin"
         android:layout_marginBottom="@dimen/default_margin"
+        android:background="@color/field_black"
         app:layout_constraintBottom_toTopOf="@id/dialogNegativeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,5 +40,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/dialogInfoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/long_press_to_remove"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/challengeRecyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

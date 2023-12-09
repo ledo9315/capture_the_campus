@@ -30,13 +30,6 @@ class CreateFragment : Fragment() {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = mainViewModel
-        //mainViewModel.clearMapPoints()
-
-        mainViewModel.selectedChallenge.observe(viewLifecycleOwner) { challenge ->
-            challenge?.let {
-                mainViewModel.setMapPoints(it.mapPoints)
-            }
-        }
 
         return binding.root
     }
@@ -48,15 +41,14 @@ class CreateFragment : Fragment() {
         observeViewModel()
         setupMapView()
 
-
         binding.recyclerViewCreate.adapter = mapPointsAdapter
-        binding.mapImageCreate.showTapHint = true
     }
 
     private fun setupButtons() {
         binding.setFlagButtonCreate.setOnClickListener {
             mainViewModel.addMapPoint()
         }
+
         binding.startGameButton.setOnClickListener {
             if (mainViewModel.isPlayerNearAnyPoint()) {
                 Toast.makeText(context, "You are too close to a flag to start the game", Toast.LENGTH_SHORT).show()
@@ -117,6 +109,12 @@ class CreateFragment : Fragment() {
             }
         }
 
+        mainViewModel.selectedChallenge.observe(viewLifecycleOwner) { challenge ->
+            challenge?.let {
+                mainViewModel.setMapPoints(it.mapPoints)
+            }
+        }
+
         mainViewModel.showToast.observe(viewLifecycleOwner) { show ->
             if (show) {
                 Toast.makeText(context, "A flag is already placed at this location", Toast.LENGTH_SHORT).show()
@@ -147,7 +145,6 @@ class CreateFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
     }
 

@@ -34,19 +34,6 @@
                 tools:ignore="ImageContrastCheck" />
 
             <ImageView
-                android:id="@+id/help_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="@dimen/default_margin"
-                android:background="@color/transparent"
-                android:contentDescription="@string/help_button_description"
-                android:src="@drawable/help_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ImageContrastCheck" />
-
-            <ImageView
                 android:id="@+id/imageViewPosition"
                 android:layout_width="@dimen/image_view_small"
                 android:layout_height="@dimen/image_view_small"
