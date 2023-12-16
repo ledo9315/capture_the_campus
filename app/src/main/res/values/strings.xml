@@ -33,4 +33,6 @@
     <string name="long_press_to_remove">Long press to remove</string>
     <string name="clock">clock</string>
     <string name="clock_pointer">clock pointer</string>
+    <string name="best_time">Best Time: --:--</string>
+    <string name="highscore_icon">highscore_icon</string>
 </resources>

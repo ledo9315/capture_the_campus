@@ -1,12 +1,13 @@
 package com.hsfl.leo_nelly.capturethecampus
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,7 +21,9 @@ class CreateFragment : Fragment() {
     private val binding get() = _binding!!
     private var mapPointsAdapter = MapPointAdapter(mutableListOf()) { position ->
         mainViewModel.removePoint(position)
-        showUndoSnackbar()
+        showSnackbar("Flag deleted", "Undo") {
+            mainViewModel.restorePoint()
+        }
     }
 
     override fun onCreateView(
@@ -30,18 +33,18 @@ class CreateFragment : Fragment() {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = mainViewModel
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // adapter für die recyclerview
+        binding.recyclerViewCreate.adapter = mapPointsAdapter
+
         setupButtons()
         observeViewModel()
         setupMapView()
-
-        binding.recyclerViewCreate.adapter = mapPointsAdapter
     }
 
     private fun setupButtons() {
@@ -50,8 +53,9 @@ class CreateFragment : Fragment() {
         }
 
         binding.startGameButton.setOnClickListener {
+            //wenn der spieler zu nah an einem flag ist, kann er das spiel nicht starten
             if (mainViewModel.isPlayerNearAnyPoint()) {
-                Toast.makeText(context, "You are too close to a flag to start the game", Toast.LENGTH_SHORT).show()
+                showSnackbar("You are too close to a flag to start the game", "OK") {}
                 return@setOnClickListener
             }
 
@@ -59,12 +63,17 @@ class CreateFragment : Fragment() {
             val mapPoints = mainViewModel.mapPoints.value.orEmpty()
 
             if (!playerName.isNullOrEmpty() && mapPoints.isNotEmpty()) {
+                mainViewModel.resetHighScoreIfNeeded()
                 findNavController().navigate(R.id.action_createFragment_to_gameFragment)
             } else {
                 if (playerName.isNullOrEmpty()) {
-                    Toast.makeText(context, "Please enter your name first", Toast.LENGTH_SHORT).show()
+                    showSnackbar("Please enter a player name", "Enter Name") {
+                        binding.inputNameField.requestFocus()
+                        showKeyboard(binding.inputNameField)
+                    }
+
                 } else if (mapPoints.isEmpty()) {
-                    Toast.makeText(context, "Please set at least one flag", Toast.LENGTH_SHORT).show()
+                    showSnackbar("Please place at least one flag", "OK") {}
                 }
             }
         }
@@ -85,15 +94,17 @@ class CreateFragment : Fragment() {
 
     private fun observeViewModel() {
         mainViewModel.mapX.observe(viewLifecycleOwner) { x ->
-            binding.imageViewPosition.layoutParams = (binding.imageViewPosition.layoutParams as ConstraintLayout.LayoutParams).apply {
-                horizontalBias = x
-            }
+            binding.imageViewPosition.layoutParams =
+                (binding.imageViewPosition.layoutParams as ConstraintLayout.LayoutParams).apply {
+                    horizontalBias = x
+                }
         }
 
         mainViewModel.mapY.observe(viewLifecycleOwner) { y ->
-            binding.imageViewPosition.layoutParams = (binding.imageViewPosition.layoutParams as ConstraintLayout.LayoutParams).apply {
-                verticalBias = y
-            }
+            binding.imageViewPosition.layoutParams =
+                (binding.imageViewPosition.layoutParams as ConstraintLayout.LayoutParams).apply {
+                    verticalBias = y
+                }
         }
 
         mainViewModel.mapPoints.observe(viewLifecycleOwner) { updatedPoints ->
@@ -104,7 +115,7 @@ class CreateFragment : Fragment() {
 
         mainViewModel.flagSetEvent.observe(viewLifecycleOwner) { isSet ->
             if (isSet) {
-                AudioHelper.playSound(requireContext(), R.raw.set_flag_sound)
+                AudioManager.playSound(requireContext(), R.raw.set_flag_sound)
                 mainViewModel.handleEvent(EventType.FlagSet)
             }
         }
@@ -115,20 +126,25 @@ class CreateFragment : Fragment() {
             }
         }
 
-        mainViewModel.showToast.observe(viewLifecycleOwner) { show ->
+        mainViewModel.showMessage.observe(viewLifecycleOwner) { show ->
             if (show) {
-                Toast.makeText(context, "A flag is already placed at this location", Toast.LENGTH_SHORT).show()
-                mainViewModel.showToast.postValue(false)
+                showSnackbar("A flag is already placed at this location", "OK") {}
+                mainViewModel.showMessage.postValue(false)
             }
         }
 
     }
 
-    private fun showUndoSnackbar() {
-        Snackbar.make(binding.root, "Flag deleted", Snackbar.LENGTH_LONG)
-            .setAction("Undo") { mainViewModel.restorePoint() }
+    private fun showSnackbar(text: String, actionText: String, action: () -> Unit) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG)
+            .setAction(actionText) { action() }
             .setActionTextColor(Color.RED)
             .show()
+    }
+
+    private fun showKeyboard(view: View) {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
     }
 
     override fun onStart() {

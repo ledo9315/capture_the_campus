@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private var locationServiceBinder: LocationService? = null
     private var isBound = false
 
+    // Verbindung zum LocationService
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             Log.d("MainActivity", "Service connected")
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Abwicklung der Berechtigungsanfrage für den Standortzugriff
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -48,19 +50,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         bindLocationService()
-
-    /*    mainViewModel.toastText.observe(this,){
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-        }
-     */
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         unbindLocationService()
     }
-
 
     private fun bindLocationService() {
         Log.d("MainActivity", "Binding LocationService")
@@ -77,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Startet die Standortaktualisierungen, wenn die Berechtigungen vorhanden sind.
     fun startLocation() {
         if (checkLocationPermission(this)) {
             if (isLocationEnabled(this)) {
@@ -112,11 +108,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkLocationPermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
+    // Zeigt eine Snackbar an, wenn die Standortdienste deaktiviert sind
     private fun showLocationServicesSnackbar() {
-        Snackbar.make(findViewById(android.R.id.content), "Location services are deactivated", Snackbar.LENGTH_LONG)
+        Snackbar.make(
+            findViewById(android.R.id.content),
+            "Location services are deactivated",
+            Snackbar.LENGTH_LONG
+        )
             .setAction("Activate") {
                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
             }.show()

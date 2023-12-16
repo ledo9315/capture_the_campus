@@ -1,5 +1,6 @@
 package com.hsfl.leo_nelly.capturethecampus
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
@@ -34,7 +35,8 @@ class LocationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        notificationManager = getSystemService(NotificationManager::class.java) as NotificationManager
+        notificationManager =
+            getSystemService(NotificationManager::class.java) as NotificationManager
         createNotificationChannel()
         locationClient = LocationServices.getFusedLocationProviderClient(this)
     }
@@ -56,14 +58,15 @@ class LocationService : Service() {
         notificationManager.createNotificationChannel(channel)
     }
 
+    @SuppressLint("ForegroundServiceType")
     private fun startForegroundIfNeeded() {
-            startForeground(NOTIFICATION_ID, buildNotification())
-            isForegroundStarted = true
+        startForeground(NOTIFICATION_ID, buildNotification())
+        isForegroundStarted = true
     }
 
     private fun stopForegroundIfNeeded() {
-            stopForeground(STOP_FOREGROUND_REMOVE)
-            isForegroundStarted = false
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        isForegroundStarted = false
     }
 
     fun startLocationUpdates(updateCallback: (Location) -> Unit) {
@@ -85,7 +88,11 @@ class LocationService : Service() {
                 }
             }
         }
-        locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        locationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
     }
 
     fun stopLocationUpdates() {

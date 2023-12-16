@@ -10,6 +10,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
+import com.google.android.material.snackbar.Snackbar
 
 
 class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
@@ -26,28 +27,40 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             _viewModel = value
         }
 
-    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onDown(e: MotionEvent): Boolean = true
-
-        override fun onSingleTapUp(e: MotionEvent): Boolean {
-            Log.d("MapView", "onSingleTapUp")
-            return true
-        }
-
-        override fun onLongPress(e: MotionEvent) {
-            viewModel?.let {
-                val (lat, lng) = it.convertScreenPositionToLatLng(e.x, e.y, width, height)
-                onMapLongClickListener?.invoke(lat, lng)
-            }
-            Log.d("MapView", "onLongPress")
-        }
-    })
-
-    private val textPaint = Paint().apply {
-        color = Color.BLACK
-        textSize = 80f
-        textAlign = Paint.Align.CENTER
+    private val textPaint = createTextPaint(Color.BLACK)
+    private val whiteTextPaint = createTextPaint(Color.WHITE)
+    private val strokePaint = createTextPaint(Color.BLACK).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 2f
+        strokeJoin = Paint.Join.ROUND
+        strokeCap = Paint.Cap.ROUND
     }
+
+    private val gestureDetector =
+        GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDown(e: MotionEvent): Boolean = true
+
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+
+                if (mapPoints.isNotEmpty() && !viewModel?.isGameReadyForUpdate()!!) {
+                    Snackbar.make(this@MapView, "Long press to place a flag", Snackbar.LENGTH_SHORT)
+                        .setActionTextColor(Color.RED)
+                        .setAction("OK") {}
+                        .show()
+                }
+
+                Log.d("MapView", "onSingleTapUp")
+                return true
+            }
+            override fun onLongPress(e: MotionEvent) {
+                viewModel?.let {
+                    val (lat, lng) = it.convertScreenPositionToLatLng(e.x, e.y, width, height)
+                    // callback bei LongPress
+                    onMapLongClickListener?.invoke(lat, lng)
+                }
+                Log.d("MapView", "onLongPress")
+            }
+        })
 
     init {
         minimumHeight = 210
@@ -56,7 +69,6 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun setMapPoints(points: List<MapPoint>) {
         mapPoints = points
-        Log.d("MapView", "$mapPoints")
         invalidate()
     }
 
@@ -65,33 +77,34 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         super.onDraw(canvas)
         canvas.drawBitmap(mapBitmap, bitmapMatrix, null)
         drawMapPoints(canvas)
-        Log.d("MapView", "onDraw")
 
         if (mapPoints.isEmpty()) {
-            val paint = Paint().apply {
-                color = Color.WHITE
-                textSize = 80f
-                textAlign = Paint.Align.CENTER
-            }
-            canvas.drawText("Long press to place a flag", width / 2f, height / 2f, paint)
+            // wenn keine MapPoints vorhanden sind, wird ein Hinweis angezeigt
+            canvas.drawText("Long press to place a flag", width / 2f, height / 2f, whiteTextPaint)
+            canvas.drawText("Long press to place a flag", width / 2f, height / 2f, strokePaint)
         }
     }
 
     private fun drawMapPoints(canvas: Canvas) {
         mapPoints.forEachIndexed { index, mapPoint ->
-
-            // Draw flag visited or not visited
-            val flagBitmap = if (mapPoint.state == PointState.VISITED) flagVisitedBitmap else flagNotVisitedBitmap
+            val flagBitmap =
+                // wenn der Punkt besucht wurde, wird die Flagge mit dem grünen Haken angezeigt, sonst nur die Flagge
+                if (mapPoint.state == PointState.VISITED) flagVisitedBitmap else flagNotVisitedBitmap
             drawFlagWithIndex(canvas, mapPoint, flagBitmap, index + 1)
         }
     }
 
-    private fun drawFlagWithIndex(canvas: Canvas, mapPoint: MapPoint, flagBitmap: Bitmap, index: Int) {
-        val imageX = mapPoint.mapX * width - (flagBitmap.width / 2)
-        val imageY = mapPoint.mapY * height - (flagBitmap.height / 2)
+    private fun drawFlagWithIndex(
+        canvas: Canvas,
+        mapPoint: MapPoint,
+        flagBitmap: Bitmap,
+        index: Int
+    ) {
+        val imageX = mapPoint.mapX * width - (flagBitmap.width / 8)
+        val imageY = mapPoint.mapY * height - (flagBitmap.height)
 
-        // Draw index if point is not visited
-        if(mapPoint.state == PointState.NOT_VISITED) {
+        // wenn der Punkt noch nicht besucht wurde, wird der Index angezeigt
+        if (mapPoint.state == PointState.NOT_VISITED) {
             canvas.drawText(index.toString(), imageX + 50, imageY + 100, textPaint)
         }
         canvas.drawBitmap(flagBitmap, imageX, imageY, null)
@@ -113,6 +126,7 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         bitmapMatrix = Matrix().apply {
+            // Skalierung der Bitmap, damit die Bitmap die gesamte View ausfüllt
             setScale(w.toFloat() / mapBitmap.width, h.toFloat() / mapBitmap.height)
         }
     }
@@ -120,5 +134,13 @@ class MapView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return gestureDetector.onTouchEvent(event)
+    }
+
+    private fun createTextPaint(color: Int): Paint {
+        return Paint().apply {
+            this.color = color
+            textSize = 80f
+            textAlign = Paint.Align.CENTER
+        }
     }
 }

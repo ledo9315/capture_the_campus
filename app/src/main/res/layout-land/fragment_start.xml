@@ -26,8 +26,8 @@
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/alt_background"
-                android:src="@drawable/background_image_campus"
                 android:scaleType="centerCrop"
+                android:src="@drawable/background_image_campus"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -66,21 +66,32 @@
             <TextView
                 android:id="@+id/tvHighscore"
                 style="@style/BaseTextViewStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/large_margin"
                 android:background="@drawable/rounded_dark_background"
                 android:drawablePadding="@dimen/small_margin"
-                android:paddingHorizontal="@dimen/small_margin"
-                android:paddingVertical="@dimen/small_margin"
+                android:paddingHorizontal="@dimen/default_margin"
+                android:paddingVertical="@dimen/default_margin"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_large"
-                app:playerName="@{viewmodel.currentHighScore.name}"
+                android:textSize="@dimen/text_size_medium"
                 app:highScore="@{viewmodel.currentHighScore.time}"
-                app:totalDistance="@{viewmodel.currentHighScore.distance}"
                 app:layout_constraintBottom_toTopOf="@+id/selectChallengeButton"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="@+id/map_backgroundImageStartLandscape"
+                app:layout_constraintStart_toStartOf="@+id/guideline5"
+                app:playerName="@{viewmodel.currentHighScore.name}"
+                app:totalDistance="@{viewmodel.currentHighScore.distance}" />
+
+            <ImageView
+                android:id="@+id/high_score_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-24dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/tvHighscore"
+                app:layout_constraintTop_toTopOf="@+id/tvHighscore"
+                app:srcCompat="@drawable/highscore_icon"
+                android:contentDescription="@string/highscore_icon" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/selectChallengeButton"
@@ -114,6 +125,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/createButton"
                 tools:ignore="VisualLintButtonSize,TextContrastCheck" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="423dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -46,29 +46,67 @@
                 android:contentDescription="@string/map_point"/>
 
             <TextView
+                android:id="@+id/distanceTravelledTextView"
+                style="@style/HeadlineStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@{viewmodel.totalDistanceLiveData}"
+                android:textSize="@dimen/text_size_medium"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/timerGame"
                 style="@style/HeadlineStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 app:formattedTime="@{viewmodel.elapsedTime}"
                 app:layout_constraintBottom_toTopOf="@+id/leaveButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/visitedFlagsTextView" />
+                app:layout_constraintStart_toStartOf="@+id/guideline2" />
 
             <TextView
                 android:id="@+id/visitedFlagsTextView"
                 style="@style/HeadlineStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:drawablePadding="@dimen/small_margin"
                 android:text="@{viewmodel.visitedFlagsCount}"
-                android:textSize="36sp"
-                app:drawableRightCompat="@drawable/flag_icon_not_visited_white"
+                android:textSize="@dimen/text_size_medium"
+                app:drawableRightCompat="@drawable/flag_icon_not_visited_white_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivclock"
+                android:layout_width="147dp"
+                android:layout_height="165dp"
+                android:contentDescription="@string/clock"
+                app:layout_constraintBottom_toTopOf="@+id/timerGame"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/clock_white" />
+
+
+            <ImageView
+                android:id="@+id/ivpointer"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="3dp"
+                android:background="@color/transparent"
+                android:contentDescription="@string/clock_pointer"
+                android:rotation="90"
+                android:rotationX="180"
+                app:layout_constraintEnd_toEndOf="@+id/ivclock"
+                app:layout_constraintHorizontal_bias="0.902"
+                app:layout_constraintStart_toStartOf="@+id/ivclock"
+                app:layout_constraintTop_toTopOf="@+id/ivclock"
+                app:srcCompat="@drawable/pointerflow" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/leaveButton"

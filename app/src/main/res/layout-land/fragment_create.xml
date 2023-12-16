@@ -75,7 +75,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/cancelGameButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText"
+                app:layout_constraintTop_toBottomOf="@+id/inputNameField"
                 tools:ignore="RtlSymmetry">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -109,7 +109,7 @@
                 tools:ignore="VisualLintButtonSize,TextContrastCheck" />
 
             <EditText
-                android:id="@+id/editTextText"
+                android:id="@+id/inputNameField"
                 style="@style/EditTextStyle"
                 android:layout_marginTop="16dp"
                 android:autofillHints=""

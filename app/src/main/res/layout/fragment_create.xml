@@ -53,7 +53,7 @@
                 style="@style/PrimaryButtonStyle"
                 android:background="@drawable/rounded_button"
                 android:text="@string/FlagPosition"
-                app:layout_constraintBottom_toTopOf="@+id/editTextText"
+                app:layout_constraintBottom_toTopOf="@+id/inputNameField"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
                 tools:ignore="VisualLintButtonSize,TextContrastCheck,VisualLintBounds" />
 
             <EditText
-                android:id="@+id/editTextText"
+                android:id="@+id/inputNameField"
                 style="@style/EditTextStyle"
                 android:autofillHints=""
                 android:background="@drawable/rounded_input"
@@ -94,7 +94,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText"
+                app:layout_constraintTop_toBottomOf="@+id/inputNameField"
                 tools:ignore="RtlSymmetry">
 
                 <androidx.recyclerview.widget.RecyclerView

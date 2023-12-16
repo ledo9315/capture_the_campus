@@ -1,13 +1,15 @@
 package com.hsfl.leo_nelly.capturethecampus
 
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.hsfl.leo_nelly.capturethecampus.databinding.FragmentResultBinding
 
 class ResultFragment : Fragment() {
@@ -23,20 +25,19 @@ class ResultFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = mainViewModel
 
-        mainViewModel.elapsedTime.observe(viewLifecycleOwner) {}
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupButtons()
+        observeViewModel()
     }
 
     private fun setupButtons() {
 
         binding.saveChallengeButton.setOnClickListener {
-            val success = mainViewModel.saveChallenge(
+            val success = ChallengeManager.saveChallenge(
                 requireContext(),
                 mainViewModel.challengeName.value ?: "",
                 mainViewModel.challengeDescription.value ?: "",
@@ -44,7 +45,17 @@ class ResultFragment : Fragment() {
             )
 
             if (success) {
-                Toast.makeText(requireContext(), "Challenge saved", Toast.LENGTH_SHORT).show()
+                Log.d("ResultFragment", "Challenge saved successfully")
+
+                Snackbar.make(
+                    binding.root,
+                    "Challenge saved successfully",
+                    Snackbar.LENGTH_SHORT
+                )
+                    .setAction("OK") {}
+                    .setActionTextColor(Color.RED)
+                    .show()
+
                 findNavController().navigate(R.id.action_resultFragment_to_startFragment)
             }
         }
@@ -54,16 +65,15 @@ class ResultFragment : Fragment() {
         }
     }
 
-
+    private fun observeViewModel() {
+        mainViewModel.elapsedTime.observe(viewLifecycleOwner) {}
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         mainViewModel.resetMapPointsStatus()
+        mainViewModel.resetChallengeInput()
         mainViewModel.isGameWon.value = false
-
-        mainViewModel.challengeName.value = ""
-        mainViewModel.challengeDescription.value = ""
-
         _binding = null
     }
 }

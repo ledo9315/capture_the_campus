@@ -1,7 +1,6 @@
 package com.hsfl.leo_nelly.capturethecampus
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +23,7 @@ class MapPointAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PointViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_map, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.flag_item_map, parent, false)
         return PointViewHolder(view)
     }
 

@@ -56,6 +56,18 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
+                android:id="@+id/distanceTravelledTextView"
+                style="@style/HeadlineStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@{viewmodel.totalDistanceLiveData}"
+                android:textSize="@dimen/text_size_medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mapImageGame" />
+
+
+            <TextView
                 android:id="@+id/visitedFlagsTextView"
                 style="@style/HeadlineStyle"
                 android:layout_width="wrap_content"
@@ -63,8 +75,8 @@
                 android:layout_marginTop="16dp"
                 android:drawablePadding="@dimen/small_margin"
                 android:text="@{viewmodel.visitedFlagsCount}"
-                android:textSize="36sp"
-                app:drawableRightCompat="@drawable/flag_icon_not_visited_white"
+                android:textSize="@dimen/text_size_medium"
+                app:drawableRightCompat="@drawable/flag_icon_not_visited_white_small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mapImageGame" />
 
@@ -77,7 +89,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mapImageGame"
-                app:srcCompat="@drawable/clock" />
+                app:srcCompat="@drawable/clock_white" />
 
 
             <ImageView
